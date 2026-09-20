@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+  <head>
+    <meta charset="utf-8" />
+    <title>BBSA Blur</title>
+    <style>
+      :root {
+        --paper: #eef0f3;
+        --ink: #171b21;
+        --muted: #5d6874;
+        --line: #cfd5dd;
+        --accent: #2f4fd0;
+      }
+
+      * { box-sizing: border-box; }
+
+      body {
+        width: 262px;
+        margin: 0;
+        padding: 14px 14px 12px;
+        background: var(--paper);
+        color: var(--ink);
+        font-family: "Segoe UI", Tahoma, "Noto Sans Arabic", system-ui, sans-serif;
+        font-size: 13px;
+        line-height: 1.5;
+      }
+
+      header {
+        display: flex;
+        align-items: baseline;
+        justify-content: space-between;
+        gap: 8px;
+        padding-bottom: 10px;
+        border-bottom: 1px solid var(--line);
+      }
+
+      h1 {
+        margin: 0;
+        font-size: 15px;
+        font-weight: 650;
+        letter-spacing: -0.01em;
+      }
+
+      .host {
+        color: var(--muted);
+        font-size: 11px;
+        direction: ltr;
+      }
+
+      .row {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 10px;
+        padding: 9px 0;
+        border-bottom: 1px solid var(--line);
+      }
+
+      .row:last-of-type { border-bottom: 0; }
+
+      label { cursor: pointer; }
+
+      .switch {
+        position: relative;
+        width: 38px;
+        height: 22px;
+        flex: none;
+      }
+
+      .switch input {
+        position: absolute;
+        inset: 0;
+        margin: 0;
+        opacity: 0;
+        cursor: pointer;
+      }
+
+      .track {
+        display: block;
+        width: 100%;
+        height: 100%;
+        border-radius: 11px;
+        background: #b9c1cb;
+        transition: background 120ms ease;
+      }
+
+      .track::after {
+        content: "";
+        position: absolute;
+        top: 3px;
+        right: 3px;
+        width: 16px;
+        height: 16px;
+        border-radius: 50%;
+        background: #fff;
+        transition: transform 120ms ease;
+      }
+
+      .switch input:checked + .track { background: var(--accent); }
+      .switch input:checked + .track::after { transform: translateX(-16px); }
+      .switch input:focus-visible + .track { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+      input[type="range"] { width: 112px; accent-color: var(--accent); }
+      select { font: inherit; padding: 3px 6px; border: 1px solid var(--line); border-radius: 5px; background: #fff; color: inherit; }
+      input[type="checkbox"] { accent-color: var(--accent); width: 15px; height: 15px; }
+
+      .value { color: var(--muted); font-variant-numeric: tabular-nums; min-width: 34px; text-align: left; direction: ltr; }
+
+      footer {
+        margin-top: 10px;
+        padding-top: 9px;
+        border-top: 1px solid var(--line);
+        color: var(--muted);
+        font-size: 11.5px;
+      }
+
+      kbd {
+        direction: ltr;
+        display: inline-block;
+        padding: 1px 5px;
+        border: 1px solid var(--line);
+        border-bottom-width: 2px;
+        border-radius: 4px;
+        background: #fff;
+        font-family: ui-monospace, Menlo, Consolas, monospace;
+        font-size: 10.5px;
+      }
+
+      @media (prefers-reduced-motion: reduce) {
+        .track, .track::after { transition: none; }
+      }
+    </style>
+  </head>
+  <body>
+    <header>
+      <h1>BBSA Blur</h1>
+      <span class="host">bugbounty.sa</span>
+    </header>
+
+    <div class="row">
+      <label for="enabled">تشغيل الـ blur</label>
+      <span class="switch">
+        <input type="checkbox" id="enabled" />
+        <span class="track"></span>
+      </span>
+    </div>
+
+    <div class="row">
+      <label for="radius">شدة الـ blur</label>
+      <span><input type="range" id="radius" min="2" max="14" step="1" /></span>
+      <span class="value" id="radiusValue">6px</span>
+    </div>
+
+    <div class="row">
+      <label for="mode">طريقة الإظهار</label>
+      <select id="mode">
+        <option value="hover">hover</option>
+        <option value="click">click</option>
+      </select>
+    </div>
+
+    <div class="row">
+      <label for="media">الصور والفيديو</label>
+      <input type="checkbox" id="media" />
+    </div>
+
+    <div class="row">
+      <label for="fields">حقول الإدخال</label>
+      <input type="checkbox" id="fields" />
+    </div>
+
+    <div class="row">
+      <label for="colors">ألوان الخطورة (severity)</label>
+      <input type="checkbox" id="colors" />
+    </div>
+
+    <div class="row">
+      <label for="curtain">تغطية الصفحة أثناء التحميل</label>
+      <input type="checkbox" id="curtain" />
+    </div>
+
+    <footer>
+      <kbd>Alt</kbd> + <kbd>Shift</kbd> + <kbd>B</kbd> يشغّل ويطفي الـ blur،
+      و<kbd>Esc</kbd> يخفي كل شي ظهر في وضع click.
+    </footer>
+
+    <script src="popup.js"></script>
+  </body>
+</html>

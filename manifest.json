@@ -1,0 +1,56 @@
+{
+  "manifest_version": 3,
+  "name": "BBSA Blur",
+  "version": "1.2.0",
+  "description": "Keeps bugbounty.sa covered while reports load, then blurs text, media, inputs and severity colours. Hover to reveal.",
+  "permissions": [
+    "storage"
+  ],
+  "host_permissions": [
+    "https://bugbounty.sa/*",
+    "https://*.bugbounty.sa/*"
+  ],
+  "content_scripts": [
+    {
+      "matches": [
+        "https://bugbounty.sa/*",
+        "https://*.bugbounty.sa/*"
+      ],
+      "js": [
+        "inject.js"
+      ],
+      "run_at": "document_start",
+      "all_frames": true,
+      "world": "MAIN"
+    },
+    {
+      "matches": [
+        "https://bugbounty.sa/*",
+        "https://*.bugbounty.sa/*"
+      ],
+      "js": [
+        "content.js"
+      ],
+      "css": [
+        "content.css"
+      ],
+      "run_at": "document_start",
+      "all_frames": true
+    }
+  ],
+  "background": {
+    "service_worker": "background.js"
+  },
+  "action": {
+    "default_popup": "popup.html",
+    "default_title": "BBSA Blur"
+  },
+  "commands": {
+    "toggle-blur": {
+      "suggested_key": {
+        "default": "Alt+Shift+B"
+      },
+      "description": "Turn blur on or off"
+    }
+  }
+}

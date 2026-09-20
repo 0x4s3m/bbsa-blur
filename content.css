@@ -1,0 +1,62 @@
+/* ---------------------------------------------------------------
+   Curtain: the whole page is covered while the route loads and the
+   API is still answering. No transition — it must be opaque on the
+   very first frame and snap back the moment it is raised again.
+   --------------------------------------------------------------- */
+html[data-bbsa-boot="1"] body {
+  filter: blur(var(--bbsa-curtain, 14px)) grayscale(1) !important;
+  transition: none !important;
+}
+
+/* ---------------------------------------------------------------
+   Per-element blur. Gated on root data attributes, so toggling is a
+   single attribute flip with no DOM re-walk.
+   Blur is applied with NO transition: a fade from clear to blurred
+   is a readable frame, which is exactly what we are avoiding.
+   --------------------------------------------------------------- */
+html[data-bbsa-enabled="1"] .bbsa-blur,
+html[data-bbsa-enabled="1"] .bbsa-blur-tint,
+html[data-bbsa-enabled="1"][data-bbsa-media="1"] .bbsa-blur-media,
+html[data-bbsa-enabled="1"][data-bbsa-fields="1"] .bbsa-blur-field {
+  filter: blur(var(--bbsa-radius, 6px));
+  transition: none;
+}
+
+/* Blur keeps colour, so a red bar still reads as High. Grayscale is what
+   actually removes the severity signal. */
+html[data-bbsa-enabled="1"][data-bbsa-colors="1"] .bbsa-blur,
+html[data-bbsa-enabled="1"][data-bbsa-colors="1"] .bbsa-blur-tint,
+html[data-bbsa-enabled="1"][data-bbsa-colors="1"][data-bbsa-media="1"] .bbsa-blur-media,
+html[data-bbsa-enabled="1"][data-bbsa-colors="1"][data-bbsa-fields="1"] .bbsa-blur-field {
+  filter: blur(var(--bbsa-radius, 6px)) grayscale(1);
+}
+
+/* Reveal on hover (or keyboard focus). The short transition lives only here,
+   so revealing eases in and hiding is instant. */
+html[data-bbsa-enabled="1"][data-bbsa-mode="hover"] .bbsa-blur:hover,
+html[data-bbsa-enabled="1"][data-bbsa-mode="hover"] .bbsa-blur:focus-within,
+html[data-bbsa-enabled="1"][data-bbsa-mode="hover"] .bbsa-blur-tint:hover,
+html[data-bbsa-enabled="1"][data-bbsa-mode="hover"] .bbsa-blur-tint:focus-within,
+html[data-bbsa-enabled="1"][data-bbsa-mode="hover"][data-bbsa-media="1"] .bbsa-blur-media:hover,
+html[data-bbsa-enabled="1"][data-bbsa-mode="hover"][data-bbsa-fields="1"] .bbsa-blur-field:hover,
+html[data-bbsa-enabled="1"][data-bbsa-mode="hover"][data-bbsa-fields="1"] .bbsa-blur-field:focus {
+  filter: none;
+  transition: filter 70ms ease-out;
+}
+
+/* Click mode: stays revealed until clicked again or Esc. */
+html[data-bbsa-enabled="1"] .bbsa-blur.bbsa-shown,
+html[data-bbsa-enabled="1"] .bbsa-blur-tint.bbsa-shown,
+html[data-bbsa-enabled="1"] .bbsa-blur-media.bbsa-shown,
+html[data-bbsa-enabled="1"] .bbsa-blur-field.bbsa-shown {
+  filter: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html[data-bbsa-enabled="1"] .bbsa-blur:hover,
+  html[data-bbsa-enabled="1"] .bbsa-blur-tint:hover,
+  html[data-bbsa-enabled="1"] .bbsa-blur-media:hover,
+  html[data-bbsa-enabled="1"] .bbsa-blur-field:hover {
+    transition: none;
+  }
+}
